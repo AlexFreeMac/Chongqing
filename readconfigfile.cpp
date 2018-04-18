@@ -27,6 +27,7 @@ ReadConfigFile::ReadConfigFile(QObject *parent) :
     g_strTransforIP = strTransforIP;
     g_LocalUdpPort = LocalUdpPort;
     g_strLocalIP = strLocalIP;
+    g_RadioStationUdpPort = RadioStationUdpPort;
     qDebug()<<"RadioStationUdpPort:"<<RadioStationUdpPort<<"strRadioStationIP:"<<strRadioStationIP;
     qDebug()<<"PhysicalUdpPort"<<PhysicalUdpPort<<"strPhysicalIP:"<<strPhysicalIP;
     qDebug()<<"LocalUdpPort:"<<LocalUdpPort<<"strLocalIP:"<<strLocalIP;

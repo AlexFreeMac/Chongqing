@@ -6,6 +6,7 @@ quint16 g_TransportUdpPort;
 QString g_strTransforIP;
 quint16 g_LocalUdpPort;
 QString g_strLocalIP;
+quint16 g_RadioStationUdpPort;
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
