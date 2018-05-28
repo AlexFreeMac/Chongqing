@@ -6,6 +6,7 @@
 
 QT       += core
 QT       += network
+QT       += serialport
 
 QT       -= gui
 
@@ -18,13 +19,39 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     readconfigfile.cpp \
-    radioconmunication.cpp \
     mainworkflow.cpp \
-    stransforlayerconmunication.cpp
+    udpsocket.cpp \
+    radiocommunication.cpp \
+    physicallayercommunication.cpp \
+    stransforlayercommunication.cpp \
+    queryfrequency.cpp \
+    shiftantenna.cpp \
+    serialport.cpp
 
 HEADERS += \
     readconfigfile.h \
-    radioconmunication.h \
     mainworkflow.h \
-    stransforlayerconmunication.h \
-    globalVariable.h
+    globalVariable.h \
+    udpsocket.h \
+    stransforlayercommunication.h \
+    radiocommunication.h \
+    physicallayercommunication.h \
+    queryfrequency.h \
+    shiftantenna.h \
+    serialport.h
+
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Olivia/release/ -lOlivia
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Olivia/debug/ -lOlivia
+else:unix: LIBS += -L$$PWD/Olivia/ -lOlivia
+
+INCLUDEPATH += $$PWD/Olivia
+DEPENDPATH += $$PWD/Olivia
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Olivia/release/ -lOliviaAlsa
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Olivia/debug/ -lOliviaAlsa
+else:unix: LIBS += -L$$PWD/Olivia/ -lOliviaAlsa
+
+INCLUDEPATH += $$PWD/Olivia
+DEPENDPATH += $$PWD/Olivia

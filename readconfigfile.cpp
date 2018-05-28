@@ -4,9 +4,11 @@
 #include <QSettings>
 #include <QDebug>
 #include "globalVariable.h"
+#include <QThread>
 ReadConfigFile::ReadConfigFile(QObject *parent) :
     QObject(parent)
 {
+    qDebug()<<__FUNCTION__<<"CurrentThread"<<QThread::currentThread();
     QString dir = QCoreApplication::applicationDirPath();
     QString iniFilePath = dir+"/config.ini";
     qDebug()<<"Current Dir:"<<iniFilePath;
@@ -28,9 +30,13 @@ ReadConfigFile::ReadConfigFile(QObject *parent) :
     g_LocalUdpPort = LocalUdpPort;
     g_strLocalIP = strLocalIP;
     g_RadioStationUdpPort = RadioStationUdpPort;
+    g_strRadioStationIP = strRadioStationIP;
+    g_strGetFreqUdpIP = strGetFreqUdpIP;
+    g_GetFreqUdpPort = GetFreqUdpPort;
     qDebug()<<"RadioStationUdpPort:"<<RadioStationUdpPort<<"strRadioStationIP:"<<strRadioStationIP;
     qDebug()<<"PhysicalUdpPort"<<PhysicalUdpPort<<"strPhysicalIP:"<<strPhysicalIP;
     qDebug()<<"LocalUdpPort:"<<LocalUdpPort<<"strLocalIP:"<<strLocalIP;
     qDebug()<<"GetFreqUdpPort"<<GetFreqUdpPort<<"strGetFreqUdpIP:"<<strGetFreqUdpIP;
     qDebug()<<"TransportUdpPort"<<TransportUdpPort<<"strTransforIP:"<<strTransforIP;
+    qDebug()<<"GetFreqUdpPort"<<g_GetFreqUdpPort<<"strGetFreqUdpIP:"<<g_strGetFreqUdpIP;
 }
