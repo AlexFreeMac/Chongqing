@@ -23,19 +23,20 @@ void UdpSocket::readMessages()
     quint16 port;
     int c = m_psocket->readDatagram(tmpBuff, 4096, &host, &port);
     qDebug()<<__FUNCTION__<<"count:"<<c<<"IP:"<<host.toString()<<"Port:"<<port<<QThread::currentThread();
-    if(port == g_RadioStationUdpPort && host.toString() == g_strRadioStationIP)
+    if(port == g_RadioStationUdpPort/* && host.toString() == g_strRadioStationIP*/)
     {
         emit RadioCommunicationSignal(tmpBuff,c);
     }
-    if(port == g_TransportUdpPort && host.toString() == g_strTransforIP)
+    if(port == g_TransportUdpPort/* && host.toString() == g_strTransforIP*/)
     {
         emit StransforLayerCommunication(tmpBuff,c);
     }
-    if(port == g_GetFreqUdpPort && host.toString() == g_strGetFreqUdpIP)
+    if(port == g_GetFreqUdpPort/* && host.toString() == g_strGetFreqUdpIP*/)
     {
 //        QueryFreqData data ;
 //        memcpy(&data, (QueryFreqData*)tmpBuff,sizeof(data));
 //        qDebug()<<data.time<<data.tx1;
+        qDebug()<<__FUNCTION__<<"g_GetFreqUdpPort:"<<g_GetFreqUdpPort;
         emit ReplyofQueryFreqSignal(tmpBuff,c);
         //emit writeshiftToRadioMessagesSignal();
     }

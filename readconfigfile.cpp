@@ -13,6 +13,7 @@ ReadConfigFile::ReadConfigFile(QObject *parent) :
     QString iniFilePath = dir+"/config.ini";
     qDebug()<<"Current Dir:"<<iniFilePath;
     QSettings *configIniRead = new QSettings(iniFilePath, QSettings::IniFormat);
+    bool isUseSerial = configIniRead->value("METHOD/USESERISL").toBool();
     QString strRadioStationIP = configIniRead->value("/IP/RadioStationIP").toString();
     QString strLocalIP = configIniRead->value("/IP/LocalIP").toString();
     QString strPhysicalIP = configIniRead->value("/IP/PhysicalIP").toString();
@@ -25,6 +26,7 @@ ReadConfigFile::ReadConfigFile(QObject *parent) :
     quint16 GetFreqUdpPort = configIniRead->value("/PORT/GetFreqUdpPort").toUInt();
     quint16 TransportUdpPort = configIniRead->value("/PORT/TransportUdpPort").toUInt();
 
+    g_isUseSerial = isUseSerial;
     g_TransportUdpPort = TransportUdpPort;
     g_strTransforIP = strTransforIP;
     g_LocalUdpPort = LocalUdpPort;
@@ -33,6 +35,7 @@ ReadConfigFile::ReadConfigFile(QObject *parent) :
     g_strRadioStationIP = strRadioStationIP;
     g_strGetFreqUdpIP = strGetFreqUdpIP;
     g_GetFreqUdpPort = GetFreqUdpPort;
+    qDebug()<<"UseSerial:"<<g_isUseSerial;
     qDebug()<<"RadioStationUdpPort:"<<RadioStationUdpPort<<"strRadioStationIP:"<<strRadioStationIP;
     qDebug()<<"PhysicalUdpPort"<<PhysicalUdpPort<<"strPhysicalIP:"<<strPhysicalIP;
     qDebug()<<"LocalUdpPort:"<<LocalUdpPort<<"strLocalIP:"<<strLocalIP;

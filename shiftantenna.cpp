@@ -8,8 +8,11 @@ void ShiftAntenna::writeshiftToRadioMessages()
 {
     char shiftToRadio = 0xee;
     //qDebug()<<__FUNCTION__<<m_pSerial->write(&shiftToRadio,1)<<QThread::currentThread();
-    qDebug()<<__FUNCTION__<<QThread::currentThread();
-    emit ShiftAntennaToRadioSignal(&shiftToRadio, 1);
+    QByteArray array;
+    array.append(shiftToRadio);
+    qDebug()<<__FUNCTION__<<"Array count"<<array.count();
+    //emit ShiftAntennaToRadioSignal(&shiftToRadio, 1);
+    emit ShiftAntennaToRadioSignal(array);
 
 }
 

@@ -10,7 +10,7 @@ StransforLayerCommunication::StransforLayerCommunication(QObject *parent) :
 {
     qDebug()<<__FUNCTION__<<"CurrentThread"<<QThread::currentThread();
     connect(&m_SendTimer,SIGNAL(timeout()),this,SLOT(sendMessagesSlot()));
-    //m_SendTimer.start(2000);
+    m_SendTimer.start(1000*5);
     rx_value = 0;
 }
 
@@ -18,11 +18,11 @@ StransforLayerCommunication::StransforLayerCommunication(QObject *parent) :
 
 void StransforLayerCommunication::sendMessagesSlot()
 {
-    QString test="qiuhong,qiuhong";
+    QString test="{\"type\":\"ip\"}";
     QByteArray cstr = test.toLatin1();
     //char *data;
     //data = test.toLatin1().data();
-
+    qDebug()<<"Heart beat";
     QHostAddress address;
     address.setAddress(g_strTransforIP);
     emit sendMessageSignal(cstr,address,g_TransportUdpPort);
@@ -36,7 +36,7 @@ void StransforLayerCommunication::receiveMessages(char *buff, int len)
     json = QJsonDocument::fromJson(data, &jsonError);
     QJsonDocument json1;
     //json = QJsonDocument::from
-    qDebug()<<QString::fromLatin1(buff,len)<<buff[0]<<buff[len-1];
+    //qDebug()<<QString::fromLatin1(buff,len)<<buff[0]<<buff[len-1];
     if(jsonError.error == QJsonParseError::NoError)
     {
         if(json.isObject())

@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     stransforlayercommunication.cpp \
     queryfrequency.cpp \
     shiftantenna.cpp \
-    serialport.cpp
+    serialport.cpp \
+    serialradiodatadeal.cpp
 
 HEADERS += \
     readconfigfile.h \
@@ -38,7 +39,8 @@ HEADERS += \
     physicallayercommunication.h \
     queryfrequency.h \
     shiftantenna.h \
-    serialport.h
+    serialport.h \
+    serialradiodatadeal.h
 
 
 

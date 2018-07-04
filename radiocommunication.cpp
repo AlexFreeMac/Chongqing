@@ -93,7 +93,14 @@ void RadioCommunication::SendCMDManualtuneSlot()
     qDebug()<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDManualtuneSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDManualtuneSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDRemoteCtrolOpen()
@@ -124,7 +131,14 @@ void RadioCommunication::SendCMDRemoteCtrolOpen()
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDRemoteCtrolOpenSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+        emit SerialSendCMDRemoteCtrolOpenSignal(array);
+    }
+    else
+    {
+        emit SendCMDRemoteCtrolOpenSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDRemoteCtrolClose()
@@ -155,7 +169,14 @@ void RadioCommunication::SendCMDRemoteCtrolClose()
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDRemoteCtrolCloseSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDRemoteCtrolCloseSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDInjectionSlot(QString mode, short channel, int rx, int tx)
@@ -221,7 +242,14 @@ void RadioCommunication::SendCMDInjectionSlot(QString mode, short channel, int r
             printf("0X%02X ", data[i]);
         }
         printf("\n");
-        emit SendCMDInjectionSignal(array, address, g_RadioStationUdpPort);
+        if(g_isUseSerial)
+        {
+            emit SerialSendCMDInjectionSignal(array);
+        }
+        else
+        {
+            emit SendCMDInjectionSignal(array, address, g_RadioStationUdpPort);
+        }
 }
 
 void RadioCommunication::SendCMDChangeModeSlot(QString mode)
@@ -268,7 +296,14 @@ void RadioCommunication::SendCMDChangeModeSlot(QString mode)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeModeSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeModeSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeChannelSlot(int channel)
@@ -303,7 +338,14 @@ void RadioCommunication::SendCMDChangeChannelSlot(int channel)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeChannelSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeChannelSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeTxSlot(int tx)
@@ -340,7 +382,14 @@ void RadioCommunication::SendCMDChangeTxSlot(int tx)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeTxSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeTxSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeRxSlot(int rx)
@@ -377,7 +426,14 @@ void RadioCommunication::SendCMDChangeRxSlot(int rx)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeRxSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeRxSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangePowSlot(QString value)
@@ -421,7 +477,14 @@ void RadioCommunication::SendCMDChangePowSlot(QString value)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangePowSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangePowSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeDSCEmitDataTypeSlot(int value)
@@ -469,7 +532,14 @@ void RadioCommunication::SendCMDChangeDSCEmitDataTypeSlot(int value)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeDSCEmitDataTypeSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeDSCEmitDataTypeSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeATTSlot(int value)
@@ -514,7 +584,14 @@ void RadioCommunication::SendCMDChangeATTSlot(int value)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeATTSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeATTSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeAGCAndMGCSlot(QString mode, int value)
@@ -557,7 +634,14 @@ void RadioCommunication::SendCMDChangeAGCAndMGCSlot(QString mode, int value)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeAGCAndMGCSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeAGCAndMGCSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeSQLSlot(bool isopen, int value)
@@ -600,7 +684,14 @@ void RadioCommunication::SendCMDChangeSQLSlot(bool isopen, int value)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeSQLSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeSQLSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeSilenceSlot(bool isopen)
@@ -641,7 +732,14 @@ void RadioCommunication::SendCMDChangeSilenceSlot(bool isopen)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeSilenceSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeSilenceSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDQueryPOWTrimSlot(QString mode)
@@ -682,7 +780,14 @@ void RadioCommunication::SendCMDQueryPOWTrimSlot(QString mode)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDQueryPOWTrimSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDQueryPOWTrimSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChangeTuneModeSlot(bool isManual)
@@ -723,7 +828,14 @@ void RadioCommunication::SendCMDChangeTuneModeSlot(bool isManual)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChangeTuneModeSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChangeTuneModeSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDQuerySelfCheckSlot()
@@ -755,7 +867,14 @@ void RadioCommunication::SendCMDQuerySelfCheckSlot()
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDQuerySelfCheckSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDQuerySelfCheckSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDQueryHostInfoSlot()
@@ -787,7 +906,14 @@ void RadioCommunication::SendCMDQueryHostInfoSlot()
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDQueryHostInfoSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDQueryHostInfoSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDQueryStatusSlot()
@@ -819,7 +945,14 @@ void RadioCommunication::SendCMDQueryStatusSlot()
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDQueryStatusSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDQueryStatusSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDTuneDebugModeStateSlot(bool isOpen)
@@ -860,7 +993,14 @@ void RadioCommunication::SendCMDTuneDebugModeStateSlot(bool isOpen)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDTuneDebugModeStateSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDTuneDebugModeStateSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDSystemQuerySlot()
@@ -892,7 +1032,14 @@ void RadioCommunication::SendCMDSystemQuerySlot()
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDSystemQuerySignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDSystemQuerySignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDPTTSettingSlot(int state)
@@ -933,7 +1080,14 @@ void RadioCommunication::SendCMDPTTSettingSlot(int state)
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDPTTSettingSignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+        SerialSendCMDPTTSettingSignal(array);
+    }
+    else
+    {
+        emit SendCMDPTTSettingSignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChannelStateQuerySlot()
@@ -965,7 +1119,14 @@ void RadioCommunication::SendCMDChannelStateQuerySlot()
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChannelStateQuerySignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChannelStateQuerySignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendMainStationStateSettingSlot(QString mode, QString sendRFvalue, int value,
@@ -1069,7 +1230,14 @@ void RadioCommunication::SendMainStationStateSettingSlot(QString mode, QString s
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChannelStateQuerySignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChannelStateQuerySignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::SendCMDChannelEmitQuerySlot()
@@ -1102,7 +1270,14 @@ void RadioCommunication::SendCMDChannelEmitQuerySlot()
     qDebug()<<__FUNCTION__<<array.length();
     QHostAddress address;
     address.setAddress(g_strRadioStationIP);
-    emit SendCMDChannelEmitQuerySignal(array, address, g_RadioStationUdpPort);
+    if(g_isUseSerial)
+    {
+
+    }
+    else
+    {
+        emit SendCMDChannelEmitQuerySignal(array, address, g_RadioStationUdpPort);
+    }
 }
 
 void RadioCommunication::timeoutSlot()

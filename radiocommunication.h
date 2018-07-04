@@ -42,10 +42,13 @@ signals:
     void SendCMDManualtuneSignal(QByteArray&, QHostAddress&, quint16);
     void SendCMDRemoteCtrolOpenSignal();
     void SendCMDRemoteCtrolOpenSignal(QByteArray&, QHostAddress&, quint16);
+    void SerialSendCMDRemoteCtrolOpenSignal(QByteArray&);
     void SendCMDRemoteCtrolCloseSignal();
     void SendCMDRemoteCtrolCloseSignal(QByteArray&, QHostAddress&, quint16);
     void SendCMDInjectionSignal(QString , short , int , int );
     void SendCMDInjectionSignal(QByteArray&, QHostAddress&, quint16);
+    void SerialSendCMDInjectionSignal(QByteArray&);
+
     void SendCMDChangeModeSignal(QString );
     void SendCMDChangeModeSignal(QByteArray&, QHostAddress&, quint16);
     void SendCMDChangeChannelSignal(QByteArray&, QHostAddress&, quint16);
@@ -82,6 +85,8 @@ signals:
     void SendCMDSystemQuerySignal(QByteArray&, QHostAddress&, quint16);
     void SendCMDPTTSettingSignal(int );
     void SendCMDPTTSettingSignal(QByteArray&, QHostAddress&, quint16);
+    void SerialSendCMDPTTSettingSignal(QByteArray&);
+
     void SendCMDChannelStateQuerySignal();
     void SendCMDChannelStateQuerySignal(QByteArray&, QHostAddress&, quint16);
     void SendMainStationStateSettingSignal(QString , QString , int /*RaidoRF-ATT*/,

@@ -11,6 +11,7 @@
 #include <queryfrequency.h>
 #include <shiftantenna.h>
 #include <serialport.h>
+#include <serialradiodatadeal.h>
 #define PTT_SEND 0x01
 #define PTT_RECEIVE 0x00
 class MainWorkFlow : public QObject
@@ -39,6 +40,7 @@ public slots:
     void DealShiftRadioResult();
     void DealShiftWidebandReceiverResult();
     void getShifResultSlot(char*buff,int len);
+    void WriteSerialMessages(QByteArray &array);
 private:
         ReadConfigFile *readConfig;
         StransforLayerCommunication *m_StransforLayerCommunication;
@@ -47,8 +49,11 @@ private:
         QueryFrequency *m_pQueryFreq;
         ShiftAntenna *m_pShiftAntenna;
 
+        SerialRadioDataDeal * m_pSerialDataDealThread;
+
         UdpSocket *m_pUdpThread;
         SerialPort* m_pSerialPortThread;
+        QSerialPort* m_pSerial;
 
         QThread m_RadioCommunicationThread;
         QThread m_StransforLayerCommunicationThread;

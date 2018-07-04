@@ -20,13 +20,13 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
     m_pUdpThread->start();
     m_pSerialPortThread = new SerialPort();
     m_pSerialPortThread->start();
+//    m_pSerialPortThread->moveToThread(m_pUdpThread->currentThread());
+    m_pSerialDataDealThread = new SerialRadioDataDeal();
+    m_pSerialDataDealThread->start();
 
     m_pShiftAntenna = new ShiftAntenna();
     m_pShiftAntenna->moveToThread(&m_ShiftAntennaThread);
     m_ShiftAntennaThread.start();
-//    m_pShiftAntenna->moveToThread(&m_ShiftAntennaThread);
-//    m_ShiftAntennaThread.start();
-    //m_pShiftAntenna->init();
 
     m_StransforLayerCommunication = new StransforLayerCommunication();
     m_StransforLayerCommunication->moveToThread(&m_StransforLayerCommunicationThread);
@@ -42,6 +42,9 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
     m_physicallayer->moveToThread(&m_physicallayerThread);
     m_physicallayerThread.start();
     //qRegisterMetaType<QHostAddress>("QHostAddress");
+    //----------serial-------------
+
+    //----------serial-------------
     //
     connect(m_pQueryFreq,SIGNAL(queryFreqSignal(QByteArray&, QHostAddress&,quint16)),
             m_pUdpThread,SLOT(sendMessages(QByteArray&, QHostAddress&,quint16)),Qt::DirectConnection);
@@ -64,10 +67,22 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
             m_pUdpThread,SLOT(sendMessages(QByteArray&,QHostAddress&,quint16)),Qt::DirectConnection);
     connect(m_pRadioCommunication,SIGNAL(SendCMDRemoteCtrolOpenSignal(QByteArray&,QHostAddress&,quint16)),
             m_pUdpThread,SLOT(sendMessages(QByteArray&,QHostAddress&,quint16)),Qt::DirectConnection);
+
+    connect(m_pRadioCommunication,SIGNAL(SerialSendCMDRemoteCtrolOpenSignal(QByteArray&)),
+            m_pSerialPortThread,SLOT(writeMessages(QByteArray&)),Qt::DirectConnection);
+//    connect(m_pRadioCommunication,SIGNAL(SerialSendCMDRemoteCtrolOpenSignal(QByteArray&)),
+//            this,SLOT(WriteSerialMessages(QByteArray&)),Qt::DirectConnection);
+
     connect(m_pRadioCommunication,SIGNAL(SendCMDRemoteCtrolCloseSignal(QByteArray&,QHostAddress&,quint16)),
                 m_pUdpThread,SLOT(sendMessages(QByteArray&,QHostAddress&,quint16)),Qt::DirectConnection);
     connect(m_pRadioCommunication,SIGNAL(SendCMDInjectionSignal(QByteArray&,QHostAddress&,quint16)),
                 m_pUdpThread,SLOT(sendMessages(QByteArray&,QHostAddress&,quint16)),Qt::DirectConnection);
+    connect(m_pRadioCommunication,SIGNAL(SerialSendCMDInjectionSignal(QByteArray&)),
+                m_pSerialPortThread,SLOT(writeMessages(QByteArray&)),Qt::DirectConnection);
+//    connect(m_pRadioCommunication,SIGNAL(SerialSendCMDInjectionSignal(QByteArray&)),
+//                this,SLOT(WriteSerialMessages(QByteArray&)),Qt::DirectConnection);
+
+
     connect(m_pRadioCommunication,SIGNAL(SendCMDChangeModeSignal(QByteArray&,QHostAddress&,quint16)),
                 m_pUdpThread,SLOT(sendMessages(QByteArray&,QHostAddress&,quint16)),Qt::DirectConnection);
     connect(m_pRadioCommunication,SIGNAL(SendCMDChangeChannelSignal(QByteArray&,QHostAddress&,quint16)),
@@ -104,6 +119,10 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
                 m_pUdpThread,SLOT(sendMessages(QByteArray&,QHostAddress&,quint16)),Qt::DirectConnection);
     connect(m_pRadioCommunication,SIGNAL(SendCMDPTTSettingSignal(QByteArray&,QHostAddress&,quint16)),
                 m_pUdpThread,SLOT(sendMessages(QByteArray&,QHostAddress&,quint16)),Qt::DirectConnection);
+    connect(m_pRadioCommunication,SIGNAL(SerialSendCMDPTTSettingSignal(QByteArray&)),
+                m_pSerialPortThread,SLOT(writeMessages(QByteArray&)),Qt::DirectConnection);
+
+
     connect(m_pRadioCommunication,SIGNAL(SendCMDChannelStateQuerySignal(QByteArray&,QHostAddress&,quint16)),
                 m_pUdpThread,SLOT(sendMessages(QByteArray&,QHostAddress&,quint16)),Qt::DirectConnection);
     connect(m_pRadioCommunication,SIGNAL(SendMainStationStateSettingSignal(QByteArray&,QHostAddress&,quint16)),
@@ -113,25 +132,37 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
     //UDP---->Object
     connect(m_pUdpThread,SIGNAL(RadioCommunicationSignal(char *, int )),
                 m_pRadioCommunication,SLOT(receiverRadioInfo(char *, int )),Qt::DirectConnection);
+    connect(m_pSerialDataDealThread,SIGNAL(RadioCommunicationSignal(char *, int )),
+                m_pRadioCommunication,SLOT(receiverRadioInfo(char *, int )),Qt::DirectConnection);
     connect(m_pUdpThread,SIGNAL(StransforLayerCommunication(char*,int)),
             m_StransforLayerCommunication,SLOT(receiveMessages(char*,int)),Qt::DirectConnection);
     connect(m_pUdpThread,SIGNAL(ReplyofQueryFreqSignal(char*,int)),this,SLOT(ReplyofQueryFreqSlot(char*,int)),Qt::DirectConnection);
     connect(&timer,SIGNAL(timeout()),this,SLOT(DealTimeOutSlot()),Qt::DirectConnection);
     connect(m_pRadioCommunication,SIGNAL(TuneSuccessSignal()),this,SLOT(UpdateTuneStateSlot()),Qt::DirectConnection);
     connect(m_physicallayer,SIGNAL(physicallSendOK()),this,SLOT(DealPHYStateSlot()),Qt::DirectConnection);
-
+//serial ???????????????????????????????????????????????????????
     connect(this,SIGNAL(MainWorkFlowShiftAntennaToRadioSignal()),
             m_pShiftAntenna,SLOT(writeshiftToRadioMessages()),Qt::DirectConnection);
+
     connect(m_pShiftAntenna,SIGNAL(ShiftAntennaToRadioSignal(char*,int)),
             m_pSerialPortThread,SLOT(writeMessages(char*,int)),Qt::DirectConnection);
+
+    connect(m_pShiftAntenna,SIGNAL(ShiftAntennaToRadioSignal(QByteArray &)),
+            m_pSerialPortThread,SLOT(writeMessages(QByteArray &)),Qt::DirectConnection);
+
+    connect(m_pShiftAntenna,SIGNAL(ShiftAntennaToWidebandReceiverSignal(char*,int)),m_pSerialPortThread,SLOT(writeMessages(char*,int)),Qt::DirectConnection);
+
     connect(m_pSerialPortThread,SIGNAL(getShifResultSignal(char*,int)),
             this,SLOT(getShifResultSlot(char*,int)),Qt::DirectConnection);
-
+//serial ??????????????????????????????????????????????????????
     connect(this,SIGNAL(SendMessagesStateSignal(char*,int,int,int)),
             m_StransforLayerCommunication,SLOT(SendMessagesState(char*,int,int,int)),Qt::DirectConnection);
     connect(m_physicallayer,SIGNAL(getRadioMessages(unsigned char*,int)),
             m_StransforLayerCommunication,SLOT(haveMessagesToStransforSlot(unsigned char*,int)),Qt::DirectConnection);
+
+
     connect(this,SIGNAL(updateStranforLayRxValue(int)),m_StransforLayerCommunication,SLOT(updateRxValue(int)),Qt::DirectConnection);
+
     connect(m_pRadioCommunication,SIGNAL(SendGPSInfo(QString,QString,QString,QString)),
             m_StransforLayerCommunication,SLOT(haveGPSToStransforSlot(QString,QString,QString,QString)),Qt::DirectConnection);
     //connect(this,SIGNAL(sendMessage(char*, QHostAddress,quint16)),m_pUdpThread,SLOT(sendMessage(char*,QHostAddress,quint16)),Qt::DirectConnection);
@@ -154,6 +185,12 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
 //    QThread::sleep(1);
 //    needSendMessagesToPhysical(array.data(),array.size());
     //emit writeshiftToWidebandReceiverSignal();
+    //emit MainWorkFlowShiftAntennaToRadioSignal();
+    m_pSerial = NULL;
+    while (m_pSerial == NULL) {
+        m_pSerial = m_pSerialPortThread->GetSerial();
+    }
+
     int times = 0;
     emit needQueryFreqSignal();
     while(1)
@@ -181,6 +218,8 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
     m_pRadioCommunication->SendCMDRemoteCtrolOpen();
     m_pRadioCommunication->SendCMDInjectionSlot("SSB",278,rx[0]*1000,tx[0]*1000);
     qDebug()<<"tx:"<<tx[0]*1000<<"rx:"<<rx[0]*1000;
+    //emit MainWorkFlowShiftAntennaToRadioSignal();
+
     while(1)
     {
         if(isTuneOK)
@@ -193,10 +232,10 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
             //
             QThread::msleep(1000);
             times++;
-            if(times == 8)//8sec
+            if(times == 15)//8sec
             {
                 qDebug()<<" InJection time out";
-
+                //m_pShiftAntenna->writeshiftToRadioMessages();
                 return;
             }
         }
@@ -307,7 +346,7 @@ TRY_AGAIN:
                 //
                 QThread::msleep(1000);
                 times++;
-                if(times == 8)//6sec
+                if(times == 15)//15sec
                 {
                     qDebug()<<" InJection time out";
                     if(i == m_ChannelsCount-1)
@@ -352,6 +391,7 @@ TRY_AGAIN:
 //}
 void MainWorkFlow::ReplyofQueryFreqSlot(char *buff, int len)
 {
+    qDebug()<<__FUNCTION__<<"Len:"<<len;
     memcpy(&m_Freqdata, (QueryFreqData*)buff,len);
     if((rx[0] != m_Freqdata.rx1) || (tx[0] != m_Freqdata.tx1)||
             (rx[1] != m_Freqdata.rx2) || (tx[1] != m_Freqdata.tx2)||
@@ -448,4 +488,11 @@ void MainWorkFlow::getShifResultSlot(char *buff, int len)
             }
         }
     }
+}
+
+void MainWorkFlow::WriteSerialMessages(QByteArray &array)
+{
+    qDebug()<<__FUNCTION__<<"Start Serial";
+    int c = m_pSerial->write(array);
+    qDebug()<<__FUNCTION__<<"Len"<<c;
 }

@@ -4,13 +4,14 @@
 #include <QObject>
 #include <QThread>
 
-class ShiftAntenna :public QThread//: public QThread
+class ShiftAntenna :public QObject
 {
     Q_OBJECT
 public:
     ShiftAntenna();
 signals:
     void ShiftAntennaToRadioSignal(char *, int);
+    void ShiftAntennaToRadioSignal( QByteArray &byteArray);
     void ShiftAntennaToWidebandReceiverSignal(char *,int);
 public slots:
     void writeshiftToRadioMessages();
