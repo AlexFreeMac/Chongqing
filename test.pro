@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     queryfrequency.cpp \
     shiftantenna.cpp \
     serialport.cpp \
-    serialradiodatadeal.cpp
+    serialradiodatadeal.cpp \
+    messagelistcontrol.cpp
 
 HEADERS += \
     readconfigfile.h \
@@ -40,7 +41,8 @@ HEADERS += \
     queryfrequency.h \
     shiftantenna.h \
     serialport.h \
-    serialradiodatadeal.h
+    serialradiodatadeal.h \
+    messagelistcontrol.h
 
 
 

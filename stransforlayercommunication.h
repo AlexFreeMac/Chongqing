@@ -34,6 +34,7 @@ public:
 signals:
     void sendMessageSignal(QByteArray &data, QHostAddress &host,quint16 port);
     void sendUserMessagesSignal(char *,int, char * ,int);
+    void needNextMessagesFromQueue();
     //void sendUserMessagesStatusSignal(char *, int);
 public slots:
     void sendMessagesSlot();

@@ -10,7 +10,8 @@ StransforLayerCommunication::StransforLayerCommunication(QObject *parent) :
 {
     qDebug()<<__FUNCTION__<<"CurrentThread"<<QThread::currentThread();
     connect(&m_SendTimer,SIGNAL(timeout()),this,SLOT(sendMessagesSlot()));
-    m_SendTimer.start(1000*5);
+    sendMessagesSlot();
+    m_SendTimer.start(1000*60);
     rx_value = 0;
 }
 
@@ -135,16 +136,22 @@ void StransforLayerCommunication::receiveMessages(char *buff, int len)
             else
             {
                 qDebug()<<"Type error!!";
+                g_isSendFinished = true;
+                emit needNextMessagesFromQueue();
             }
         }
         else
         {
             qDebug()<<"Json error!!";
+            g_isSendFinished = true;
+            emit needNextMessagesFromQueue();
         }
     }
     else
     {
         qDebug()<<"Json error First";
+        g_isSendFinished = true;
+        emit needNextMessagesFromQueue();
     }
 
 }
@@ -164,11 +171,13 @@ void StransforLayerCommunication::SendMessagesState(char* str, int len,int state
     rootobj.insert("tx",tx);
     if(state == 1)
     {
-        rootobj.insert("type",type+1);
+        type = type+1;
+        rootobj.insert("type",type);
     }
     else
     {
-        rootobj.insert("type",type+2);
+        type = type+2;
+        rootobj.insert("type",type);
     }
 
     QDateTime dateTime;
@@ -176,7 +185,7 @@ void StransforLayerCommunication::SendMessagesState(char* str, int len,int state
     QString timeStr = dateTime.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
     qDebug()<<timeStr;
     rootobj.insert("dateTime",timeStr);
-    qDebug()<<"2222"<<rootobj.count();
+    qDebug()<<__FUNCTION__<<"$$$$$$$$$$$$$$$"<<"type:"<<type;
 
     json_Messages.setObject(rootobj);
     QByteArray byteArray = json_Messages.toJson();
@@ -184,6 +193,8 @@ void StransforLayerCommunication::SendMessagesState(char* str, int len,int state
     QHostAddress address;
     address.setAddress(g_strTransforIP);
     emit sendMessageSignal(byteArray, address, g_TransportUdpPort);
+    g_isSendFinished = true;
+    emit needNextMessagesFromQueue();
 }
 
 void StransforLayerCommunication::haveMessagesToStransforSlot(unsigned char *buff, int len)
@@ -200,7 +211,7 @@ void StransforLayerCommunication::haveMessagesToStransforSlot(unsigned char *buf
     QJsonDocument document;
     document.setObject(tmp_json);
     QByteArray jsonByteArray = document.toJson(QJsonDocument::Compact);
-    qDebug()<<__FUNCTION__<<jsonByteArray;
+    qDebug()<<__FUNCTION__<<"$$$$$$$$$$$$$$$type:3"<<"rx_Value:"<<rx_value;
     QHostAddress address;
     address.setAddress(g_strTransforIP);
     emit sendMessageSignal(jsonByteArray, address, g_TransportUdpPort);
