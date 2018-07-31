@@ -28,6 +28,7 @@ public slots:
 signals:
     void RadioCommunicationSignal(char *, int );
     void StransforLayerCommunication(char *, int );
+    void AddMessageToQueueSignal(char *, int );
     void ReplyofQueryFreqSignal(char *, int );
 
 private:

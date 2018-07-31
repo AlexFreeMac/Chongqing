@@ -23,6 +23,8 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
 //    m_pSerialPortThread->moveToThread(m_pUdpThread->currentThread());
     m_pSerialDataDealThread = new SerialRadioDataDeal();
     m_pSerialDataDealThread->start();
+    m_MessageListControl = new MessageListControl();
+    m_MessageListControl->start();
 
     m_pShiftAntenna = new ShiftAntenna();
     m_pShiftAntenna->moveToThread(&m_ShiftAntennaThread);
@@ -134,8 +136,14 @@ MainWorkFlow::MainWorkFlow(QObject *parent) :
                 m_pRadioCommunication,SLOT(receiverRadioInfo(char *, int )),Qt::DirectConnection);
     connect(m_pSerialDataDealThread,SIGNAL(RadioCommunicationSignal(char *, int )),
                 m_pRadioCommunication,SLOT(receiverRadioInfo(char *, int )),Qt::DirectConnection);
-    connect(m_pUdpThread,SIGNAL(StransforLayerCommunication(char*,int)),
+//    connect(m_pUdpThread,SIGNAL(StransforLayerCommunication(char*,int)),
+//            m_StransforLayerCommunication,SLOT(receiveMessages(char*,int)),Qt::DirectConnection);
+    connect(m_pUdpThread,SIGNAL(AddMessageToQueueSignal(char*,int)),
+            m_MessageListControl,SLOT(addMessagesToQueue(char*,int)),Qt::DirectConnection);
+    connect(m_MessageListControl,SIGNAL(NeedSendMessagesToPhyLayer(char*,int)),
             m_StransforLayerCommunication,SLOT(receiveMessages(char*,int)),Qt::DirectConnection);
+    connect(m_StransforLayerCommunication,SIGNAL(needNextMessagesFromQueue()),
+            m_MessageListControl,SLOT(nextMessages()),Qt::DirectConnection);
     connect(m_pUdpThread,SIGNAL(ReplyofQueryFreqSignal(char*,int)),this,SLOT(ReplyofQueryFreqSlot(char*,int)),Qt::DirectConnection);
     connect(&timer,SIGNAL(timeout()),this,SLOT(DealTimeOutSlot()),Qt::DirectConnection);
     connect(m_pRadioCommunication,SIGNAL(TuneSuccessSignal()),this,SLOT(UpdateTuneStateSlot()),Qt::DirectConnection);

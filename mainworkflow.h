@@ -12,6 +12,7 @@
 #include <shiftantenna.h>
 #include <serialport.h>
 #include <serialradiodatadeal.h>
+#include <messagelistcontrol.h>
 #define PTT_SEND 0x01
 #define PTT_RECEIVE 0x00
 class MainWorkFlow : public QObject
@@ -43,6 +44,7 @@ public slots:
     void WriteSerialMessages(QByteArray &array);
 private:
         ReadConfigFile *readConfig;
+        MessageListControl *m_MessageListControl;
         StransforLayerCommunication *m_StransforLayerCommunication;
         RadioCommunication *m_pRadioCommunication;
         PhysicalLayerCommunication *m_physicallayer;

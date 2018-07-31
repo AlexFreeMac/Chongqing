@@ -16,4 +16,5 @@ extern int g_WriteIndex;
 extern int g_ReadIndex;
 extern QSemaphore g_freeBytes;
 extern QSemaphore g_usedBytes;
+extern bool g_isSendFinished;
 #endif // GLOBALVARIABLE_H

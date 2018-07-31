@@ -29,7 +29,8 @@ void UdpSocket::readMessages()
     }
     if(port == g_TransportUdpPort/* && host.toString() == g_strTransforIP*/)
     {
-        emit StransforLayerCommunication(tmpBuff,c);
+        //emit StransforLayerCommunication(tmpBuff,c);
+        emit AddMessageToQueueSignal(tmpBuff,c);
     }
     if(port == g_GetFreqUdpPort/* && host.toString() == g_strGetFreqUdpIP*/)
     {
